@@ -1,5 +1,6 @@
 package pr02;
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.*;
@@ -17,7 +18,9 @@ public class VentanaJuego extends JFrame {
 	MundoJuego miMundo;        // Mundo del juego
 	CocheJuego miCoche;        // Coche del juego
 	MiRunnable miHilo = null;  // Hilo del bucle principal de juego	
-
+	
+	boolean[]booleanos={false,false,false,false};
+	
 	/** Constructor de la ventana de juego. Crea y devuelve la ventana inicializada
 	 * sin coches dentro
 	 */
@@ -80,23 +83,53 @@ public class VentanaJuego extends JFrame {
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
 					case KeyEvent.VK_UP: {
+						booleanos[0]=true;
 						miCoche.acelera( +5, 1 );
 						break;
 					}
 					case KeyEvent.VK_DOWN: {
+						booleanos[1]=true;
 						miCoche.acelera( -5, 1 );
 						break;
 					}
 					case KeyEvent.VK_LEFT: {
+						booleanos[2]=true;
 						miCoche.gira( +10 );
 						break;
 					}
 					case KeyEvent.VK_RIGHT: {
+						booleanos[3]=true;
 						miCoche.gira( -10 );
 						break;
 					}
 				}
 			}
+			public void keyReleased(KeyEvent e) {
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_UP: {
+						booleanos[0]=false;
+				
+						break;
+					}
+					case KeyEvent.VK_DOWN: {
+						booleanos[1]=false;
+						
+						break;
+					}
+					case KeyEvent.VK_LEFT: {
+						booleanos[2]=false;
+				
+						break;
+					}
+					case KeyEvent.VK_RIGHT: {
+						booleanos[3]=false;
+						break;
+					}
+				}
+			}
+		
+		
+		
 		});
 		pPrincipal.setFocusable(true);
 		pPrincipal.requestFocus();
@@ -151,9 +184,24 @@ public class VentanaJuego extends JFrame {
 		public void run() {
 			// Bucle principal forever hasta que se pare el juego...
 			while (sigo) {
+				
+				
+				for(int i=0;i<4;i++){
+				
+				if(booleanos[i]=true){
+					switch(i){
+					case 0:miCoche.acelera(+5,1);break;
+					case 1:miCoche.acelera(-5,1);break;
+					case 2:miCoche.gira(+10);break;
+					case 3:miCoche.gira(-10);break;
+					}
+				}
+				}
+				//miMundo.creaEstrella();
 				// Mover coche
 				miCoche.mueve( 0.040 );
 				// Chequear choques
+				
 				// (se comprueba tanto X como Y porque podría a la vez chocar en las dos direcciones (esquinas)
 				if (miMundo.hayChoqueHorizontal(miCoche)) // Espejo horizontal si choca en X
 					miMundo.rebotaHorizontal(miCoche);
